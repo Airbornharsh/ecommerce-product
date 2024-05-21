@@ -6,6 +6,7 @@ import axios from 'axios'
 interface ProductContextProps {
   products: Product[]
   setProducts: (page: number, search: string) => void
+  totalProductPages: number
 }
 
 const ProductContext = createContext<ProductContextProps | undefined>(undefined)
@@ -30,6 +31,7 @@ export const ProductProvider: React.FC<ProductContextProviderProps> = ({
 }) => {
   const { setIsLoading } = useLoader()
   const [products, setProducts] = useState<Product[]>([])
+  const [totalProductPages, setTotalProductPages] = useState<number>(0)
 
   const setProductsFn = async (page: number, search: string) => {
     setIsLoading(true)
@@ -40,6 +42,7 @@ export const ProductProvider: React.FC<ProductContextProviderProps> = ({
       )
       const responseData = response.data
       setProducts(responseData.products)
+      setTotalProductPages(responseData.total_pages)
     } catch (e) {
       console.log(e)
     } finally {
@@ -49,7 +52,8 @@ export const ProductProvider: React.FC<ProductContextProviderProps> = ({
 
   const contextValue: ProductContextProps = {
     products,
-    setProducts: setProductsFn
+    setProducts: setProductsFn,
+    totalProductPages
   }
 
   return (

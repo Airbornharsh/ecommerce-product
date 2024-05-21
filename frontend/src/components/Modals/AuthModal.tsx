@@ -14,14 +14,18 @@ const AuthModal = () => {
     e.preventDefault()
     try {
       await signIn(formData)
-    } catch (e) { /* empty */ }
+    } catch (e) {
+      /* empty */
+    }
   }
 
   const handleSignup = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     try {
       await signUp(formData)
-    } catch (e) { /* empty */ }
+    } catch (e) {
+      /* empty */
+    }
   }
 
   return (

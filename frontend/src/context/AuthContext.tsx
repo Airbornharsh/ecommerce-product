@@ -14,7 +14,9 @@ interface AuthContextProps {
   signIn: (formData: AuthFormData) => Promise<void>
   signUp: (formData: AuthFormData) => Promise<void>
   cartItems: CartItem[]
+  addToCart: (productId: number) => Promise<void>
   getCartItems: () => Promise<void>
+  totalCartPages: number
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -42,6 +44,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<User | null>()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [totalCartPages, setTotalCartPages] = useState<number>(0)
 
   const signIn = async (formData: AuthFormData) => {
     setIsLoading(true)
@@ -88,6 +91,31 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
+  const addToCart = async (productId: number) => {
+    setIsLoading(true)
+    try {
+      if (!token) {
+        setErrorToastMessage('Please login to add to cart')
+        return
+      }
+      await axios.post(
+        `${BACKEND_URL}/api/cart`,
+        { product_id: productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      setToastMessage('Added to cart')
+    } catch (e) {
+      console.log(e)
+      setErrorToastMessage('Failed to add to cart')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const getCartItems = async () => {
     setIsLoading(true)
     try {
@@ -98,6 +126,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
       })
       const responseData = response.data
       setCartItems(responseData.cart)
+      setTotalCartPages(responseData.total_pages)
     } catch (e) {
       console.log(e)
     } finally {
@@ -114,7 +143,9 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     signIn,
     signUp,
     cartItems,
-    getCartItems
+    getCartItems,
+    totalCartPages,
+    addToCart
   }
 
   return (
