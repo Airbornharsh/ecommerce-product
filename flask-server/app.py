@@ -51,7 +51,7 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    images = db.Column(db.Text, nullable=False)
+    images = db.Column(db.ARRAY(db.Text), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -184,6 +184,32 @@ def create_product():
         db.session.rollback()
         print(e)
         return jsonify({"message": "Server error! Please try again later."}), 500
+
+
+@app.route("/api/products", methods=["GET"])
+def get_products():
+    page = int(request.args.get("page", 0))
+    per_page = int(request.args.get("per_page", 20))
+    offset = page * per_page
+    search = request.args.get("search", "")
+    products = (
+        Product.query.filter((Product.name.ilike(f"%{search}%")))
+        .order_by(Product.created_at.asc())
+        .limit(per_page)
+        .offset(offset)
+        .all()
+    )
+    result = [
+        {
+            "id": product.id,
+            "name": product.name,
+            "price": product.price,
+            "description": product.description,
+            "images": product.images,
+        }
+        for product in products
+    ]
+    return jsonify({"Products": result}), 200
 
 
 if __name__ == "__main__":
