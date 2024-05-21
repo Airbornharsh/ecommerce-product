@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 import axios from 'axios'
-import { AuthFormData, User } from '../utils/types'
+import { AuthFormData, CartItem, User } from '../utils/types'
 import { BACKEND_URL } from '../utils/config'
 import { useLoader } from './LoaderContext'
 
@@ -13,6 +13,8 @@ interface AuthContextProps {
   setUser: (user: User) => void
   signIn: (formData: AuthFormData) => Promise<void>
   signUp: (formData: AuthFormData) => Promise<void>
+  cartItems: CartItem[]
+  getCartItems: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -39,6 +41,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
   const [token, setToken] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<User | null>()
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
 
   const signIn = async (formData: AuthFormData) => {
     setIsLoading(true)
@@ -85,6 +88,23 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
+  const getCartItems = async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const responseData = response.data
+      setCartItems(responseData.cart)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const contextValue: AuthContextProps = {
     token,
     setToken,
@@ -92,7 +112,9 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     user: user || null,
     setUser,
     signIn,
-    signUp
+    signUp,
+    cartItems,
+    getCartItems
   }
 
   return (

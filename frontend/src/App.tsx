@@ -5,21 +5,24 @@ import { LoaderProvider } from './context/LoaderContext'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Loader from './components/Loader'
+import { ProductProvider } from './context/ProductContext'
 
 const App: React.FC = () => {
   return (
     <LoaderProvider>
-      <AuthProvider>
-        <div>
-          <Navbar />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
-          </BrowserRouter>
-          <Loader />
-        </div>
-      </AuthProvider>
+      <ProductProvider>
+        <AuthProvider>
+          <div>
+            <Navbar />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Home />} />
+              </Routes>
+            </BrowserRouter>
+            <Loader />
+          </div>
+        </AuthProvider>
+      </ProductProvider>
     </LoaderProvider>
   )
 }

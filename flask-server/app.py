@@ -75,6 +75,7 @@ class Cart(db.Model):
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
+    product = db.relationship("Product", backref="cart")
 
     def __init__(self, user_id, product_id, quantity, price):
         self.user_id = user_id
@@ -206,7 +207,7 @@ def get_products():
         {
             "id": product.id,
             "name": product.name,
-            "price": product.price,
+            "price": int(product.price),
             "description": product.description,
             "images": product.images,
         }
@@ -221,7 +222,7 @@ def get_product(product_id):
     result = {
         "id": product.id,
         "name": product.name,
-        "price": product.price,
+        "price": int(product.price),
         "description": product.description,
         "images": product.images,
     }
@@ -245,8 +246,8 @@ def add_to_cart():
             cart_item = Cart(
                 user_id=res,
                 product_id=product_id,
-                quantity=quantity,
-                price=product.price,
+                quantity=int(quantity),
+                price=int(product.price),
             )
             db.session.add(cart_item)
         db.session.commit()
@@ -267,7 +268,8 @@ def get_cart():
     per_page = int(request.args.get("per_page", 20))
     offset = page * per_page
     cart_items = (
-        Cart.query.filter(Cart.user_id == int(res))
+        Cart.query.join(Product)
+        .filter(Cart.user_id == int(res))
         .order_by(Cart.updated_at.asc())
         .limit(per_page)
         .offset(offset)
@@ -277,12 +279,19 @@ def get_cart():
     result = [
         {
             "id": cart_item.id,
-            "product_id": cart_item.product_id,
-            "quantity": cart_item.quantity,
-            "price": cart_item.price,
+            "product": {
+                "id": cart_item.product_id,
+                "name": cart_item.product.name,
+                "price": int(cart_item.product.price),
+                "description": cart_item.product.description,
+                "images": cart_item.product.images,
+            },
+            "quantity": int(cart_item.quantity),
+            "price": int(cart_item.price),
         }
         for cart_item in cart_items
     ]
+
     return jsonify({"cart": result}), 200
 
 
