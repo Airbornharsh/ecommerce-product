@@ -21,8 +21,9 @@ interface AuthContextProps {
   signUp: (formData: AuthFormData) => Promise<void>
   cartItems: CartItem[]
   addToCart: (productId: number) => Promise<void>
-  getCartItems: () => Promise<void>
+  getCartItems: (page: number) => Promise<void>
   totalCartPages: number
+  removeFromCart: (id: number) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -129,7 +130,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
   const addToCart = async (productId: number) => {
     setIsLoading(true)
     try {
-      if (!token) {
+      if (!isAuthenticated) {
         setErrorToastMessage('Please login to add to cart')
         return
       }
@@ -151,10 +152,13 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
-  const getCartItems = async () => {
+  const getCartItems = async (page: number) => {
     setIsLoading(true)
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/cart`, {
+      if (!isAuthenticated) {
+        return
+      }
+      const response = await axios.get(`${BACKEND_URL}/api/cart?page=${page}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -164,6 +168,28 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
       setTotalCartPages(responseData.total_pages)
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const removeFromCart = async (id: number) => {
+    setIsLoading(true)
+    try {
+      if (!isAuthenticated) {
+        setErrorToastMessage('Please login to remove from cart')
+        return
+      }
+      await axios.delete(`${BACKEND_URL}/api/cart/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setCartItems(cartItems.filter((item) => item.id !== id))
+      setToastMessage('Removed from cart')
+    } catch (e) {
+      console.log(e)
+      setErrorToastMessage('Failed to remove from cart')
     } finally {
       setIsLoading(false)
     }
@@ -180,7 +206,8 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     cartItems,
     getCartItems,
     totalCartPages,
-    addToCart
+    addToCart,
+    removeFromCart
   }
 
   return (

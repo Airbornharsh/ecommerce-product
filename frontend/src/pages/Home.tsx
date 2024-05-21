@@ -64,7 +64,7 @@ const Home = () => {
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={(data) => {
-          setPage(data.selected)
+          setPage(data.selected + 1)
         }}
         containerClassName={'pagination'}
       />
