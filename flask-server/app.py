@@ -212,5 +212,18 @@ def get_products():
     return jsonify({"Products": result}), 200
 
 
+@app.route("/api/products/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    result = {
+        "id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "description": product.description,
+        "images": product.images,
+    }
+    return jsonify({"product": result}), 200
+
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
