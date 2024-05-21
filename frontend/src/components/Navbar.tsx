@@ -2,6 +2,7 @@ import { useAuth } from '../context/AuthContext'
 import { Button, Modal } from '@mui/material'
 import AuthModal from './Modals/AuthModal'
 import { useEffect, useState } from 'react'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
@@ -14,26 +15,33 @@ const Navbar = () => {
   return (
     <div className="h-10 w-screen flex justify-between items-center px-2">
       <h1>Ecommerce</h1>
-      {isAuthenticated ? (
-        <Button
-          style={{
-            color: 'white',
-            backgroundColor: 'red'
+      <div className="flex gap-2 items-center">
+        <ShoppingCartIcon
+          onClick={() => {
+            window.location.href = '/cart'
           }}
-        >
-          Logout
-        </Button>
-      ) : (
-        <Button
-          style={{
-            color: 'white',
-            backgroundColor: 'blue'
-          }}
-          onClick={() => setOpen(true)}
-        >
-          Login
-        </Button>
-      )}
+        />
+        {isAuthenticated ? (
+          <Button
+            style={{
+              color: 'white',
+              backgroundColor: 'red'
+            }}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Button
+            style={{
+              color: 'white',
+              backgroundColor: 'blue'
+            }}
+            onClick={() => setOpen(true)}
+          >
+            Login
+          </Button>
+        )}
+      </div>
       <Modal
         open={open}
         onClose={() => {

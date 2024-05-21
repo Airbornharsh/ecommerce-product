@@ -1,5 +1,11 @@
 'use client'
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect
+} from 'react'
 import axios from 'axios'
 import { AuthFormData, CartItem, User } from '../utils/types'
 import { BACKEND_URL } from '../utils/config'
@@ -45,6 +51,35 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
   const [user, setUser] = useState<User | null>()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [totalCartPages, setTotalCartPages] = useState<number>(0)
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      setToken(token)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      tokenCheck()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
+
+  const tokenCheck = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const responseData = response.data
+      setUser(responseData.user)
+      setIsAuthenticated(true)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const signIn = async (formData: AuthFormData) => {
     setIsLoading(true)

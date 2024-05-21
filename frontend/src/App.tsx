@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Loader from './components/Loader'
 import { ProductProvider } from './context/ProductContext'
+import Cart from './pages/Cart'
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/cart" element={<Cart />} />
               </Routes>
             </BrowserRouter>
             <Loader />

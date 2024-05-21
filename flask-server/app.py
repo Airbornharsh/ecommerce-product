@@ -166,6 +166,20 @@ def api_signin():
         return jsonify({"message": "Email is incorrect."}), 404
 
 
+@app.route("/api/user", methods=["GET"])
+def get_user():
+    res, code = tokenOperations.authenticate_user(request)
+    if code != 200:
+        return jsonify({"error": res}), code
+    user = User.query.get_or_404(res)
+    result = {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+    }
+    return jsonify({"user": result}), 200
+
+
 @app.route("/api/products", methods=["POST"])
 def create_product():
     res, code = tokenOperations.authenticate_user(request)
@@ -281,7 +295,9 @@ def get_cart():
     )
 
     total_cart_items = Cart.query.filter(Cart.user_id == int(res)).count()
-    total_pages = (total_cart_items // per_page) + (1 if total_cart_items % per_page != 0 else 0)
+    total_pages = (total_cart_items // per_page) + (
+        1 if total_cart_items % per_page != 0 else 0
+    )
 
     result = [
         {
