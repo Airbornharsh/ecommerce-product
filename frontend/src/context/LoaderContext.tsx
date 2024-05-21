@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface LoaderContextProps {
   isLoading: boolean
   setIsLoading: (loading: boolean) => void
+  setToastMessage: (message: string) => void
+  setErrorToastMessage: (message: string) => void
 }
 
 const LoaderContext = createContext<LoaderContextProps | undefined>(undefined)
@@ -23,18 +27,35 @@ interface LoaderContextProviderProps {
 }
 
 export const LoaderProvider: React.FC<LoaderContextProviderProps> = ({
-  children,
+  children
 }) => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const setToastMessage = (message: string) => {
+    toast.success(message, {
+      position: 'top-right',
+      autoClose: 2000
+    })
+  }
+
+  const setErrorToastMessage = (message: string) => {
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 2000
+    })
+  }
 
   const contextValue: LoaderContextProps = {
     isLoading,
     setIsLoading,
+    setToastMessage,
+    setErrorToastMessage
   }
 
   return (
     <LoaderContext.Provider value={contextValue}>
       {children}
+      <ToastContainer />
     </LoaderContext.Provider>
   )
 }

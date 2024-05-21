@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 import axios from 'axios'
 import { AuthFormData, User } from '../utils/types'
 import { BACKEND_URL } from '../utils/config'
+import { useLoader } from './LoaderContext'
 
 interface AuthContextProps {
   token: string
@@ -34,11 +35,13 @@ interface AuthContextProviderProps {
 export const AuthProvider: React.FC<AuthContextProviderProps> = ({
   children
 }) => {
+  const { setIsLoading, setErrorToastMessage, setToastMessage } = useLoader()
   const [token, setToken] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<User | null>()
 
   const signIn = async (formData: AuthFormData) => {
+    setIsLoading(true)
     try {
       const response = await axios.post(`${BACKEND_URL}/api/signin`, {
         email: formData.email,
@@ -50,12 +53,17 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
       setToken(access_token)
       setUser(responseData.user)
       setIsAuthenticated(true)
+      setToastMessage('Logged in successfully')
     } catch (e) {
       console.log(e)
+      setErrorToastMessage('Invalid credentials')
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const signUp = async (formData: AuthFormData) => {
+    setIsLoading(true)
     try {
       const response = await axios.post(`${BACKEND_URL}/api/signup`, {
         name: formData.name,
@@ -68,8 +76,12 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
       setToken(access_token)
       setUser(responseData.user)
       setIsAuthenticated(true)
+      setToastMessage('Signed up successfully')
     } catch (e) {
       console.log(e)
+      setErrorToastMessage('Invalid credentials')
+    } finally {
+      setIsLoading(false)
     }
   }
 

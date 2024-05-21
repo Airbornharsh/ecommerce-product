@@ -1,9 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from './env/HomePage'
+import Home from './pages/Home'
 import { LoaderProvider } from './context/LoaderContext'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
+import Loader from './components/Loader'
 
 const App: React.FC = () => {
   return (
@@ -13,9 +14,10 @@ const App: React.FC = () => {
           <Navbar />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Home />} />
             </Routes>
           </BrowserRouter>
+          <Loader />
         </div>
       </AuthProvider>
     </LoaderProvider>
