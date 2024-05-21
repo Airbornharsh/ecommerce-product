@@ -254,5 +254,33 @@ def add_to_cart():
         return jsonify({"message": "Server error! Please try again later."}), 500
 
 
+@app.route("/api/cart", methods=["GET"])
+def get_cart():
+    res, code = tokenOperations.authenticate_user(request)
+    if code != 200:
+        return jsonify({"error": res}), code
+    page = int(request.args.get("page", 0))
+    per_page = int(request.args.get("per_page", 20))
+    offset = page * per_page
+    cart_items = (
+        Cart.query.filter(Cart.user_id == int(res))
+        .order_by(Cart.updated_at.asc())
+        .limit(per_page)
+        .offset(offset)
+        .all()
+    )
+
+    result = [
+        {
+            "id": cart_item.id,
+            "product_id": cart_item.product_id,
+            "quantity": cart_item.quantity,
+            "price": cart_item.price,
+        }
+        for cart_item in cart_items
+    ]
+    return jsonify({"cart": result}), 200
+
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
