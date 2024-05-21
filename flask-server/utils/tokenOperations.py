@@ -1,6 +1,7 @@
 import os
 import jwt
 from utils import tokenOperations
+from flask import g
 
 
 def decode_token(token):
