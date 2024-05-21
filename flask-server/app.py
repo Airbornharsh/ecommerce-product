@@ -203,6 +203,10 @@ def get_products():
         .offset(offset)
         .all()
     )
+    total_products = Product.query.filter(Product.name.ilike(f"%{search}%")).count()
+    total_pages = (total_products // per_page) + (
+        1 if total_products % per_page != 0 else 0
+    )
     result = [
         {
             "id": product.id,
@@ -213,7 +217,7 @@ def get_products():
         }
         for product in products
     ]
-    return jsonify({"products": result}), 200
+    return jsonify({"products": result, "total_pages": total_pages}), 200
 
 
 @app.route("/api/products/<int:product_id>", methods=["GET"])
@@ -276,6 +280,9 @@ def get_cart():
         .all()
     )
 
+    total_cart_items = Cart.query.filter(Cart.user_id == int(res)).count()
+    total_pages = (total_cart_items // per_page) + (1 if total_cart_items % per_page != 0 else 0)
+
     result = [
         {
             "id": cart_item.id,
@@ -292,7 +299,7 @@ def get_cart():
         for cart_item in cart_items
     ]
 
-    return jsonify({"cart": result}), 200
+    return jsonify({"cart": result, "total_pages": total_pages}), 200
 
 
 @app.route("/api/cart/<int:cart_item_id>", methods=["DELETE"])

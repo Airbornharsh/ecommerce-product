@@ -30,13 +30,13 @@ const Home = () => {
         {products.map((product) => (
           <li
             key={product.id}
-            className="border p-4 w-[48vw] max-w-[20rem] max500:w-[94vw] max500:max-w-[94vw]"
+            className="border p-4 w-[48vw] max-w-[20rem] max500:w-[94vw] max500:max-w-[94vw] bg-white rounded-lg shadow-md"
           >
             <Link to={`/product/${product.id}`}>
               <img
                 src={product.images[0]}
                 alt={product.name}
-                className="h-80 object-cover sm:h-60 max500:w-full"
+                className="h-80 object-cover sm:h-60 max500:w-full rounded-t-lg"
               />
             </Link>
             <h2 className="mt-2 text-lg font-bold">{product.name}</h2>
