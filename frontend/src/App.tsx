@@ -1,25 +1,25 @@
-import { Box, Image, Text, Link } from '@chakra-ui/react'
-import { Link as RouterLink } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import HomePage from './env/HomePage'
+import { LoaderProvider } from './context/LoaderContext'
+import { AuthProvider } from './context/AuthContext'
+import Navbar from './components/Navbar'
 
-const ProductCard = () => {
-  const product = {
-    id: 1,
-    name: 'Product 1',
-    price: 100,
-    images: ['https://via.placeholder.com/150']
-  }
+const App: React.FC = () => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p="5">
-      <Image src={product.images[0]} alt={product.name} />
-      <Text mt="2" fontWeight="bold">
-        {product.name}
-      </Text>
-      <Text>{product.price}</Text>
-      <Link as={RouterLink} to={`/product/${product.id}`}>
-        View Details
-      </Link>
-    </Box>
+    <LoaderProvider>
+      <AuthProvider>
+        <div>
+          <Navbar />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </AuthProvider>
+    </LoaderProvider>
   )
 }
 
-export default ProductCard
+export default App

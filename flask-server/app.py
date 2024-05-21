@@ -190,7 +190,8 @@ def create_product():
 
 @app.route("/api/products", methods=["GET"])
 def get_products():
-    page = int(request.args.get("page", 0))
+    page = int(request.args.get("page", 1))
+    page = page - 1 if page > 0 else 0
     per_page = int(request.args.get("per_page", 20))
     offset = page * per_page
     search = request.args.get("search", "")
@@ -211,7 +212,7 @@ def get_products():
         }
         for product in products
     ]
-    return jsonify({"Products": result}), 200
+    return jsonify({"products": result}), 200
 
 
 @app.route("/api/products/<int:product_id>", methods=["GET"])
@@ -261,7 +262,8 @@ def get_cart():
     res, code = tokenOperations.authenticate_user(request)
     if code != 200:
         return jsonify({"error": res}), code
-    page = int(request.args.get("page", 0))
+    page = int(request.args.get("page", 1))
+    page = page - 1 if page > 0 else 0
     per_page = int(request.args.get("per_page", 20))
     offset = page * per_page
     cart_items = (
