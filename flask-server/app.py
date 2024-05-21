@@ -31,6 +31,7 @@ migrate = Migrate(app, db)
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -38,7 +39,8 @@ class User(db.Model):
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    def __init__(self, email, password):
+    def __init__(self, name, email, password):
+        self.name = name
         self.email = email
         self.password = password
 
@@ -61,11 +63,12 @@ class Product(db.Model):
         self.description = description
         self.images = images
 
+
 class Cart(db.Model):
     __tablename__ = "cart"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
     quantity = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
@@ -77,9 +80,11 @@ class Cart(db.Model):
         self.product_id = product_id
         self.quantity = quantity
 
+
 @app.route("/api/signup", methods=["POST"])
 def api_signup():
     data = request.json
+    name = data.get("name")
     email = data.get("email")
     password = data.get("password")
     hashed_password = passwordOperations.create_bcrypt_hash(
@@ -87,7 +92,7 @@ def api_signup():
     )
 
     try:
-        new_user = User(email=email, password=hashed_password)
+        new_user = User(name=name, email=email, password=hashed_password)
         exp = int(time.time() + 360000)
         payload = {
             "exp": exp,
@@ -95,8 +100,20 @@ def api_signup():
             "email": email,
         }
         token = tokenOperations.encode_token(payload)
+        db.session.add(new_user)
+        db.session.commit()
         resp = make_response(
-            jsonify({"message": "User created successfully", "access_token": token}),
+            jsonify(
+                {
+                    "message": "User created successfully",
+                    "access_token": token,
+                    "user": {
+                        "id": new_user.id,
+                        "name": new_user.name,
+                        "email": new_user.email,
+                    },
+                }
+            ),
             200,
         )
         return resp
@@ -132,6 +149,11 @@ def api_signin():
                 {
                     "message": "Logged In",
                     "access_token": token,
+                    "user": {
+                        "id": user.id,
+                        "name": user.name,
+                        "email": user.email,
+                    },
                 }
             ),
             200,
@@ -139,6 +161,29 @@ def api_signin():
         return resp
     else:
         return jsonify({"message": "Email is incorrect."}), 404
+
+
+@app.route("/api/products", methods=["POST"])
+def create_product():
+    res, code = tokenOperations.authenticate_user(request)
+    if code != 200:
+        return jsonify({"error": res}), code
+    try:
+        data = request.json
+        name = data.get("name")
+        price = data.get("price")
+        description = data.get("description")
+        images = data.get("images")
+        new_product = Product(
+            name=name, price=price, description=description, images=images
+        )
+        db.session.add(new_product)
+        db.session.commit()
+        return jsonify({"message": "Product created successfully"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return jsonify({"message": "Server error! Please try again later."}), 500
 
 
 if __name__ == "__main__":
