@@ -70,15 +70,17 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
     quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    def __init__(self, user_id, product_id, quantity):
+    def __init__(self, user_id, product_id, quantity, price):
         self.user_id = user_id
         self.product_id = product_id
         self.quantity = quantity
+        self.price = price
 
 
 @app.route("/api/signup", methods=["POST"])
@@ -223,6 +225,33 @@ def get_product(product_id):
         "images": product.images,
     }
     return jsonify({"product": result}), 200
+
+
+@app.route("/api/cart", methods=["POST"])
+def add_to_cart():
+    data = request.json
+    user_id = data.get("user_id")
+    product_id = data.get("product_id")
+    quantity = data.get("quantity", 1)
+    try:
+        cart_item = Cart.query.filter_by(user_id=user_id, product_id=product_id).first()
+        if cart_item:
+            cart_item.quantity += quantity
+        else:
+            product = Product.query.get_or_404(product_id)
+            cart_item = Cart(
+                user_id=user_id,
+                product_id=product_id,
+                quantity=quantity,
+                price=product.price,
+            )
+            db.session.add(cart_item)
+        db.session.commit()
+        return jsonify({"message": "Item added to cart"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return jsonify({"message": "Server error! Please try again later."}), 500
 
 
 if __name__ == "__main__":
