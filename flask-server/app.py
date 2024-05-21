@@ -229,18 +229,20 @@ def get_product(product_id):
 
 @app.route("/api/cart", methods=["POST"])
 def add_to_cart():
+    res, code = tokenOperations.authenticate_user(request)
+    if code != 200:
+        return jsonify({"error": res}), code
     data = request.json
-    user_id = data.get("user_id")
     product_id = data.get("product_id")
     quantity = data.get("quantity", 1)
     try:
-        cart_item = Cart.query.filter_by(user_id=user_id, product_id=product_id).first()
+        cart_item = Cart.query.filter_by(user_id=res, product_id=product_id).first()
         if cart_item:
             cart_item.quantity += quantity
         else:
             product = Product.query.get_or_404(product_id)
             cart_item = Cart(
-                user_id=user_id,
+                user_id=res,
                 product_id=product_id,
                 quantity=quantity,
                 price=product.price,
@@ -280,6 +282,22 @@ def get_cart():
         for cart_item in cart_items
     ]
     return jsonify({"cart": result}), 200
+
+
+@app.route("/api/cart/<int:cart_item_id>", methods=["DELETE"])
+def remove_from_cart(cart_item_id):
+    res, code = tokenOperations.authenticate_user(request)
+    if code != 200:
+        return jsonify({"error": res}), code
+    try:
+        cart_item = Cart.query.filter_by(user_id=res, id=cart_item_id).first()
+        db.session.delete(cart_item)
+        db.session.commit()
+        return jsonify({"message": "Item removed from cart"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return jsonify({"message": "Server error! Please try again later."}), 500
 
 
 if __name__ == "__main__":
