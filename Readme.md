@@ -22,6 +22,6 @@ Frontend will be live at [Website](http://localhost:5173) in Local
 
 Live:
 
-Frontend - [Live](https://ecommerce-frontend.harshkeshri.com)
+Frontend - [Live](https://ecommerce-product.harshkeshri.com)
 
 Backend - [Live](https://ecommerce-product-backend.harshkeshri.com)
