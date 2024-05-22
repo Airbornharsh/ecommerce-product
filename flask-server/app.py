@@ -84,6 +84,16 @@ class Cart(db.Model):
         self.price = price
 
 
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Welcome to the Server"}), 200
+
+
+@app.route("/api", methods=["GET"])
+def api():
+    return jsonify({"message": "Welcome to the API"}), 200
+
+
 @app.route("/api/signup", methods=["POST"])
 def api_signup():
     data = request.json
