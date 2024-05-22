@@ -50,10 +50,10 @@ const Product2 = () => {
   }
 
   return (
-    <div className="flex h-full w-screen flex-col items-center justify-center gap-10 rounded-lg bg-white mt-10">
+    <div className="mt-10 flex h-full w-screen flex-col items-center justify-center gap-10 rounded-lg bg-white">
       <div className="mb-10 w-[90vw] max-w-[85rem] flex-col items-center max1000:w-[96vw]">
-        <div className="flex h-full justify-center gap-10 rounded-lg bg-white max1250:gap-4 max1000:w-[96vw] max1000:flex-col">
-          <div className="flex gap-10 max1250:gap-4 max1000:hidden">
+        <div className="flex h-full justify-center gap-10 rounded-lg bg-white max1000:w-[96vw] max1000:flex-col max1250:gap-4">
+          <div className="flex gap-10 max1000:hidden max1250:gap-4">
             <div className="scrollBar flex h-[70vh] w-[8rem] flex-col gap-2 overflow-auto max1250:w-[6rem]">
               {product.images.map((image, index) => (
                 <img
@@ -161,7 +161,7 @@ const Product2 = () => {
                 color: 'white',
                 backgroundColor: '#3dd11f'
               }}
-              className='flex items-center gap-2 w-60'
+              className="flex w-60 items-center gap-2"
             >
               <WhatsAppIcon />
               <span>INQUIRE ON WHATSAPP</span>

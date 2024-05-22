@@ -31,13 +31,13 @@ const AuthModal = () => {
   return (
     <>
       {isLogin ? (
-        <form className="w-[90vw] max-w-[25rem] bg-white px-2 py-2 rounded">
+        <form className="w-[90vw] max-w-[25rem] rounded bg-white px-2 py-2">
           <div className="flex flex-col space-y-4">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
-              className="p-2 border border-gray-300 rounded"
+              className="rounded border border-gray-300 p-2"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -47,20 +47,20 @@ const AuthModal = () => {
             <input
               type="password"
               id="password"
-              className="p-2 border border-gray-300 rounded"
+              className="rounded border border-gray-300 p-2"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
             />
             <p
-              className="text-blue-500 text-xs cursor-pointer"
+              className="cursor-pointer text-xs text-blue-500"
               onClick={() => setIsLogin(false)}
             >
               Don't have an Account
             </p>
             <button
-              className="bg-blue-500 text-white p-2 rounded"
+              className="rounded bg-blue-500 p-2 text-white"
               onClick={handleLogin}
             >
               Login
@@ -68,13 +68,13 @@ const AuthModal = () => {
           </div>
         </form>
       ) : (
-        <form className="w-[90vw] max-w-[25rem] bg-white px-2 py-2 rounded">
+        <form className="w-[90vw] max-w-[25rem] rounded bg-white px-2 py-2">
           <div className="flex flex-col space-y-4">
             <label htmlFor="name">Name</label>
             <input
               type="text"
               id="name"
-              className="p-2 border border-gray-300 rounded"
+              className="rounded border border-gray-300 p-2"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -84,7 +84,7 @@ const AuthModal = () => {
             <input
               type="email"
               id="email"
-              className="p-2 border border-gray-300 rounded"
+              className="rounded border border-gray-300 p-2"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -94,20 +94,20 @@ const AuthModal = () => {
             <input
               type="password"
               id="password"
-              className="p-2 border border-gray-300 rounded"
+              className="rounded border border-gray-300 p-2"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
             />
             <p
-              className="text-blue-500 text-xs cursor-pointer"
+              className="cursor-pointer text-xs text-blue-500"
               onClick={() => setIsLogin(true)}
             >
               Already have an Account
             </p>
             <button
-              className="bg-blue-500 text-white p-2 rounded"
+              className="rounded bg-blue-500 p-2 text-white"
               onClick={handleSignup}
             >
               Sign up

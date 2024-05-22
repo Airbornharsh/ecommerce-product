@@ -13,9 +13,9 @@ const Navbar = () => {
   }, [isAuthenticated])
 
   return (
-    <div className="h-10 w-screen flex justify-between items-center px-2">
+    <div className="fixed flex h-10 w-screen items-center justify-between bg-white px-2 shadow-md">
       <h1>Ecommerce</h1>
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <ShoppingCartIcon
           onClick={() => {
             window.location.href = '/cart'

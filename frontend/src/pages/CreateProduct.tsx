@@ -9,7 +9,7 @@ const CreateProductPage: React.FC = () => {
   const [images, setImages] = useState<string>('')
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-5 border rounded-lg shadow-lg">
+    <div className="mx-auto mt-10 max-w-md rounded-lg border p-5 shadow-lg">
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -23,7 +23,7 @@ const CreateProductPage: React.FC = () => {
       >
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="mb-2 block text-sm font-bold text-gray-700"
             htmlFor="name"
           >
             Product Name
@@ -33,13 +33,13 @@ const CreateProductPage: React.FC = () => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             required
           />
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="mb-2 block text-sm font-bold text-gray-700"
             htmlFor="price"
           >
             Price (in Rupees)
@@ -49,13 +49,13 @@ const CreateProductPage: React.FC = () => {
             type="text"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             required
           />
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="mb-2 block text-sm font-bold text-gray-700"
             htmlFor="description"
           >
             Description
@@ -64,13 +64,13 @@ const CreateProductPage: React.FC = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             required
           />
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="mb-2 block text-sm font-bold text-gray-700"
             htmlFor="images"
           >
             Images (comma separated URLs)
@@ -80,13 +80,13 @@ const CreateProductPage: React.FC = () => {
             type="text"
             value={images}
             onChange={(e) => setImages(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
             required
           />
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
         >
           Create Product
         </button>

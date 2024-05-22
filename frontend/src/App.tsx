@@ -17,15 +17,20 @@ const App: React.FC = () => {
         <AuthProvider>
           <div className="w-screen overflow-hidden">
             <Navbar />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/create-product" element={<CreateProductPage />} />
-                <Route path="*" element={<div>Not Found</div>} />
-              </Routes>
-            </BrowserRouter>
+            <div className="mt-12">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/product/:id" element={<ProductPage />} />
+                  <Route
+                    path="/create-product"
+                    element={<CreateProductPage />}
+                  />
+                  <Route path="*" element={<div>Not Found</div>} />
+                </Routes>
+              </BrowserRouter>
+            </div>
             <Loader />
           </div>
         </AuthProvider>

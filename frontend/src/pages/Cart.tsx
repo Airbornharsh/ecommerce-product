@@ -20,18 +20,18 @@ const Cart = () => {
 
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-4 mx-2">Your Cart</h1>
-      <ul className="flex flex-col mx-2">
+      <h1 className="mx-2 mb-4 text-2xl font-bold">Your Cart</h1>
+      <ul className="mx-2 flex flex-col">
         {cartItems.map((item) => (
           <li
             key={item.id}
-            className="border p-4 mb-4 flex justify-between max500:flex-col max500:gap-2 rounded"
+            className="mb-4 flex justify-between rounded border p-4 max500:flex-col max500:gap-2"
           >
             <div className="flex gap-2 max500:flex-col">
               <img
                 src={item.product.images[0]}
                 alt={item.product.name}
-                className="w-32 h-32 rounded-lg object-cover max500:w-full max500:h-60 max500:rounded-lg max500:rounded-t-lg"
+                className="h-32 w-32 rounded-lg object-cover max500:h-60 max500:w-full max500:rounded-lg max500:rounded-t-lg"
               />
               <div>
                 <h2 className="text-lg font-bold">{item.product.name}</h2>

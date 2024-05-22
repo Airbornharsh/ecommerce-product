@@ -24,19 +24,19 @@ const Home = () => {
         placeholder="Search products"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border p-2 mb-1 mt-1 w-[80vw] ml-1 max-w-[20rem] max500:w-[94vw] max500:max-w-[94vw]"
+        className="mb-1 ml-1 mt-1 w-[80vw] max-w-[20rem] border p-2 max500:w-[94vw] max500:max-w-[94vw]"
       />
       <ul className="flex flex-wrap gap-2">
         {products.map((product) => (
           <li
             key={product.id}
-            className="border p-4 w-[48vw] max-w-[20rem] max500:w-[94vw] max500:max-w-[94vw] bg-white rounded-lg shadow-md"
+            className="w-[48vw] max-w-[20rem] rounded-lg border bg-white p-4 shadow-md max500:w-[94vw] max500:max-w-[94vw]"
           >
             <Link to={`/product/${product.id}`}>
               <img
                 src={product.images[0]}
                 alt={product.name}
-                className="h-80 object-cover sm:h-60 max500:w-full rounded-t-lg"
+                className="h-80 rounded-t-lg object-cover sm:h-60 max500:w-full"
               />
             </Link>
             <h2 className="mt-2 text-lg font-bold">{product.name}</h2>
