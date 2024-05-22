@@ -25,6 +25,12 @@ interface AuthContextProps {
   totalCartPages: number
   removeFromCart: (id: number) => Promise<void>
   logout: () => void
+  createProduct: (formData: {
+    name: string
+    description: string
+    price: number
+    images: string[]
+  }) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -203,6 +209,32 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
+  const createProduct = async (formData: {
+    name: string
+    description: string
+    price: number
+    images: string[]
+  }) => {
+    setIsLoading(true)
+    try {
+      if (!isAuthenticated) {
+        setErrorToastMessage('Please login to create product')
+        return
+      }
+      await axios.post(`${BACKEND_URL}/api/products`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setToastMessage('Product created successfully')
+    } catch (e) {
+      console.log(e)
+      setErrorToastMessage('Failed to create product')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const contextValue: AuthContextProps = {
     token,
     setToken,
@@ -216,7 +248,8 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     totalCartPages,
     addToCart,
     removeFromCart,
-    logout
+    logout,
+    createProduct
   }
 
   return (

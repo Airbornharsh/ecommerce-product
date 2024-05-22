@@ -8,6 +8,7 @@ import Loader from './components/Loader'
 import { ProductProvider } from './context/ProductContext'
 import Cart from './pages/Cart'
 import ProductPage from './pages/Product'
+import CreateProductPage from './pages/CreateProduct'
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,8 @@ const App: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/product/:id" element={<ProductPage />} />
+                <Route path="/create-product" element={<CreateProductPage />} />
+                <Route path="*" element={<div>Not Found</div>} />
               </Routes>
             </BrowserRouter>
             <Loader />
