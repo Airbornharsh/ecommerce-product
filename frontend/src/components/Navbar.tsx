@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
 
   useEffect(() => {
     setOpen(!isAuthenticated)
@@ -27,6 +27,7 @@ const Navbar = () => {
               color: 'white',
               backgroundColor: 'red'
             }}
+            onClick={logout}
           >
             Logout
           </Button>
@@ -34,7 +35,7 @@ const Navbar = () => {
           <Button
             style={{
               color: 'white',
-              backgroundColor: 'blue'
+              backgroundColor: 'green'
             }}
             onClick={() => setOpen(true)}
           >

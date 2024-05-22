@@ -20,10 +20,11 @@ interface AuthContextProps {
   signIn: (formData: AuthFormData) => Promise<void>
   signUp: (formData: AuthFormData) => Promise<void>
   cartItems: CartItem[]
-  addToCart: (productId: number) => Promise<void>
+  addToCart: (productId: number, quantity?: number) => Promise<void>
   getCartItems: (page: number) => Promise<void>
   totalCartPages: number
   removeFromCart: (id: number) => Promise<void>
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -82,6 +83,13 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
+  const logout = () => {
+    localStorage.removeItem('access_token')
+    setToken('')
+    setIsAuthenticated(false)
+    setUser(null)
+  }
+
   const signIn = async (formData: AuthFormData) => {
     setIsLoading(true)
     try {
@@ -127,7 +135,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     }
   }
 
-  const addToCart = async (productId: number) => {
+  const addToCart = async (productId: number, quantity?: number) => {
     setIsLoading(true)
     try {
       if (!isAuthenticated) {
@@ -136,7 +144,7 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
       }
       await axios.post(
         `${BACKEND_URL}/api/cart`,
-        { product_id: productId },
+        { product_id: productId, quantity: quantity || 1 },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -207,7 +215,8 @@ export const AuthProvider: React.FC<AuthContextProviderProps> = ({
     getCartItems,
     totalCartPages,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    logout
   }
 
   return (

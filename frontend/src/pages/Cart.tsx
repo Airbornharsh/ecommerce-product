@@ -19,9 +19,9 @@ const Cart = () => {
   }, [isAuthenticated, page])
 
   return (
-    <div className="container mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
-      <ul className="flex flex-col">
+    <div className="mt-10">
+      <h1 className="text-2xl font-bold mb-4 mx-2">Your Cart</h1>
+      <ul className="flex flex-col mx-2">
         {cartItems.map((item) => (
           <li
             key={item.id}
@@ -36,6 +36,7 @@ const Cart = () => {
               <div>
                 <h2 className="text-lg font-bold">{item.product.name}</h2>
                 <p>Quantity: {item.quantity}</p>
+                <p>Total Price: ₹{(item.price * item.quantity) / 100}</p>
               </div>
             </div>
             <Button

@@ -40,7 +40,7 @@ const Home = () => {
               />
             </Link>
             <h2 className="mt-2 text-lg font-bold">{product.name}</h2>
-            <p className="mt-2">${product.price}</p>
+            <p className="mt-2">₹{product.price / 100}</p>
             <div className="flex flex-col gap-2">
               <Button
                 variant="contained"

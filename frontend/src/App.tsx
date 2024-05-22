@@ -7,18 +7,20 @@ import Navbar from './components/Navbar'
 import Loader from './components/Loader'
 import { ProductProvider } from './context/ProductContext'
 import Cart from './pages/Cart'
+import ProductPage from './pages/Product'
 
 const App: React.FC = () => {
   return (
     <LoaderProvider>
       <ProductProvider>
         <AuthProvider>
-          <div>
+          <div className="w-screen overflow-hidden">
             <Navbar />
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/product/:id" element={<ProductPage />} />
               </Routes>
             </BrowserRouter>
             <Loader />
