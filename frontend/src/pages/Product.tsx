@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Button } from '@mui/material'
 import { useLoader } from '../context/LoaderContext'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 
 const Product2 = () => {
   const { setToastMessage } = useLoader()
@@ -40,6 +41,12 @@ const Product2 = () => {
       return
     }
     setToastMessage('Product Bought')
+  }
+
+  const handleInquireClick = () => {
+    const message = `Hey, I am interested in buying ${product.name}- ₹${product.price / 100}.`
+    const whatsappUrl = `https://wa.me/${+918787878787}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
   }
 
   return (
@@ -146,6 +153,18 @@ const Product2 = () => {
               }}
             >
               Buy Now
+            </Button>
+            <Button
+              onClick={handleInquireClick}
+              variant="contained"
+              style={{
+                color: 'white',
+                backgroundColor: '#3dd11f'
+              }}
+              className='flex items-center gap-2 w-60'
+            >
+              <WhatsAppIcon />
+              <span>INQUIRE ON WHATSAPP</span>
             </Button>
           </div>
         </div>
